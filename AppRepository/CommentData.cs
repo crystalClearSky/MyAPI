@@ -197,19 +197,46 @@ namespace MyAppAPI.AppRepository
             Comments.Remove(commnentToDelete);
         }
 
-        public List<Like> GetLikes(int id)
+        public List<Like> GetLikesByAvatar(int id)
         {
-            var commentsWithLikesByUser = CommentData.CurrentComments.
-            Comments.Where(c => c.Likes.Any(l => l.LikedById == id));
-            var Likes = new List<Like>();
-            foreach (var comment in commentsWithLikesByUser)
-            {
-                Likes.AddRange(comment.Likes);
-            }
+            // var commentsWithLikesByUser = CommentData.CurrentComments.
+            // Comments.Where(c => c.Likes.Any(l => l.LikedById == id));
+            // var Likes = new List<Like>();
+            // foreach (var comment in commentsWithLikesByUser)
+            // {
+            //     Likes.AddRange(comment.Likes);
+            // }
 
             // var count = commentsWithLikesByUser.Count();
 
-            return Likes;
+            var comments = CommentData.CurrentComments.Comments;
+            var likes = comments.Select(c => c.Likes);
+            
+            var result = new List<Like>();
+            foreach (var like in likes)
+            {
+                foreach (var l in like)
+                {
+                    if (l.LikedById == id)
+                    {
+                    result.Add(l);
+                    }
+                }
+                // var l = like.Where(l => l.LikedById == 1);
+            }
+
+            return result;
+        }
+
+        public IEnumerable<Comment> GetCommentsLikedByAvatar(int id)
+        {
+            var result =
+            from comment in CommentData.CurrentComments.Comments
+            from likes in comment.Likes
+            where likes.LikedById == id
+            select comment;
+
+            return result;
         }
 
         public List<Like> GetAllLikes()
@@ -242,6 +269,25 @@ namespace MyAppAPI.AppRepository
                 isValid = true;
             }
             return isValid;
+        }
+
+        public List<Avatar> GetAvatarsThatLikeThisComment(int id)
+        {
+            var result = CommentData.CurrentComments.GetCommentById(id);
+
+            var avatarIds = 
+            from likes in result.Likes
+            select likes.LikedById;
+            
+            var avatarResults = new List<Avatar>();
+
+            foreach (var item in avatarIds)
+            {
+                var avatar = AvatarData.CurrentAvatar.GetAvatarById(item);
+                avatarResults.Add(avatar);
+            }
+
+            return avatarResults;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,28 @@ using Microsoft.Extensions.Hosting;
 using MyAppAPI.AppRepository;
 using MyAppAPI.Services;
 using Newtonsoft.Json.Serialization;
+using MyAppAPI.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace MyAppApi
 {
     public class Startup
     {
+        private IConfiguration Config { get; set;}
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration config)
+        {
+            Config = config;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
             .AddNewtonsoftJson();
+
+            services.AddCors();
             // services.AddMvc()
             // .AddNewtonsoftJson(options =>
             // {
@@ -31,6 +43,12 @@ namespace MyAppApi
             services.AddScoped<IAvatarData, AvatarData>();
             services.AddScoped<ICommentData, CommentData>();
 
+            // var connectionString = @"Server=(localdb)\mssqllocaldb;Database=ContentContextDB;Trusted_Connection=True;";
+            var connectionString = Config["connectionStrings:ContentConnectionString"];
+            services.AddDbContext<ContentContext>(opt =>
+            {
+                opt.UseSqlServer(connectionString);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +61,13 @@ namespace MyAppApi
 
             app.UseRouting();
 
+            app.UseCors(builder =>
+            
+            builder.WithOrigins("https://localhost:5100")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            );
+
             app.UseStatusCodePages();
 
             app.UseEndpoints(endpoints =>
@@ -50,5 +75,6 @@ namespace MyAppApi
                 endpoints.MapControllers();
             });
         }
+
     }
 }

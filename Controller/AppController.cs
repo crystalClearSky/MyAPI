@@ -8,6 +8,7 @@ using MyAppAPI.Services;
 using MyAppAPI.Models;
 using MyAppAPI.Models.GalleryModel.CreateModel;
 using MyAppAPI.Models.GalleryModel.UpdateModel;
+using Microsoft.Extensions.Logging;
 
 namespace MyAppAPI.Controller
 {
@@ -15,11 +16,14 @@ namespace MyAppAPI.Controller
     [Route("api/content")]
     public class AppController : ControllerBase
     {
-        public IGalleryData GalleryDb { get; }
-        public AppController(IGalleryData galleryDb)
-        {
-            this.GalleryDb = galleryDb;
+        private readonly ILogger<AppController> _logger;
 
+        public IGalleryData GalleryDb { get; }
+        public AppController(IGalleryData galleryDb, ILogger<AppController> logger)
+        {
+
+            this.GalleryDb = galleryDb;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         [HttpGet]
         public IActionResult GetContents()
@@ -30,7 +34,16 @@ namespace MyAppAPI.Controller
             //         GalleryData.Current.Cards
             //     }
             // );
-            var results = GalleryData.Current.getAllCards();
+            IEnumerable<GalleryCard> results = new List<GalleryCard>();
+            try
+            {
+                results = GalleryData.Current.getAllCards();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unable to retrieve gallery cards data.", ex);
+                return StatusCode(500, "There was an expection found.");
+            }
             return Ok(results);
         }
 
@@ -49,87 +62,135 @@ namespace MyAppAPI.Controller
             return Ok(card);
         }
         [HttpGet("tag/")]
-        public IActionResult GetGalleryByTag([FromQuery] string[] words) // frombody list of tags
+        public IActionResult GetGalleryByTag([FromQuery] string q) // frombody list of tags
         {
-            var tags = new List<Tag>();
-            foreach (var word in words)
+            try
             {
-                tags.Add(new Tag() { TagItem = word });
+              var tags = new List<Tag>();
+              
+              if (!string.IsNullOrWhiteSpace(q))
+              {
+                  var result = q.Split(' ');
+                  foreach (var word in result)
+                  {
+                      tags.Add(new Tag() { TagItem = word });
+                  }
+              }
+              else
+              {
+                  return BadRequest("Empty request!");
+              }
+              
+  
+              var cards = GalleryData.Current.GetGalleryCardsByTags(tags);
+              if (cards.Count() <= 0)
+              {
+                  return NotFound("No Cards found!");
+              }
+  
+              return Ok(cards);
             }
-            var cards = GalleryData.Current.GetGalleryCardsByTags(tags);
-            if (cards.Count() <= 0)
+            catch (Exception ex)
             {
-                return NotFound("No Cards found!");
+                _logger.LogError($"Unable to get a gallery card with this tag.", ex);
+                return StatusCode(500, "There was an expection at TAG Gallery Controller.");
             }
-
-            return Ok(cards);
         }
         [HttpPost]
         public IActionResult CreateGalleryCard([FromBody] CreateGalleryCard createdGalleryCard)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var maxGalleryCardId = GalleryDb.getAllCards().Max(g => g.Id);
+
+                var finalGalleryCard = new GalleryCard()
+                {
+                    Id = ++maxGalleryCardId,
+                    Title = createdGalleryCard.Title,
+                    ImageUrl = createdGalleryCard.ImageUrl,
+                    Descritpion = createdGalleryCard.Descritpion,
+                    Tags = createdGalleryCard.Tags,
+                    CreatedOn = DateTime.UtcNow
+                };
+                GalleryData.Current.Cards.Add(finalGalleryCard);
+                return CreatedAtRoute(
+                    "GetGallery",
+                    new { id = finalGalleryCard.Id },
+                    finalGalleryCard
+                );
             }
-
-            var maxGalleryCardId = GalleryDb.getAllCards().Max(g => g.Id);
-
-            var finalGalleryCard = new GalleryCard()
+            catch (Exception ex)
             {
-                Id = ++maxGalleryCardId,
-                Title = createdGalleryCard.Title,
-                ImageUrl = createdGalleryCard.ImageUrl,
-                Descritpion = createdGalleryCard.Descritpion,
-                Tags = createdGalleryCard.Tags,
-                CreatedOn = DateTime.UtcNow
-            };
-            GalleryData.Current.Cards.Add(finalGalleryCard);
-            return CreatedAtRoute(
-                "GetGallery",
-                new { id = finalGalleryCard.Id },
-                finalGalleryCard
-            );
+                _logger.LogError($"Unable to CREATE a gallery card.", ex);
+                return StatusCode(500, "There was an expection at CREATE Gallery Controller.");
+            }
 
             // Add Put for Udtating a gallery Card.
             // Add Patch to Ammend part of a Gallery Card.
         }
         [HttpPut("{id}")]
-        public IActionResult UpdateGalleryCard(int id, 
+        public IActionResult UpdateGalleryCard(int id,
         [FromBody] UpdateGalleryCard updateGalleryCard)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            var galleryCardStore = GalleryData.Current.Cards.FirstOrDefault(g => g.Id == id);
-            if (galleryCardStore == null)
-            {
-                return NotFound();
-            }
+                var galleryCardStore = GalleryData.Current.Cards.FirstOrDefault(g => g.Id == id);
+                if (galleryCardStore == null)
+                {
+                    return NotFound();
+                }
 
-            galleryCardStore.Title = updateGalleryCard.Title;
-            if (updateGalleryCard.ImageUrl != null)
-            {
-            galleryCardStore.ImageUrl = updateGalleryCard.ImageUrl;
-            }
-            if (updateGalleryCard.Descritpion != null)
-            {
-            galleryCardStore.Descritpion = updateGalleryCard.Descritpion;
-            }
-            if (updateGalleryCard.Tags != null)
-            {
-            galleryCardStore.Tags = updateGalleryCard.Tags;
-            }
+                galleryCardStore.Title = updateGalleryCard.Title;
+                if (updateGalleryCard.ImageUrl != null)
+                {
+                    galleryCardStore.ImageUrl = updateGalleryCard.ImageUrl;
+                }
+                if (updateGalleryCard.Descritpion != null)
+                {
+                    galleryCardStore.Descritpion = updateGalleryCard.Descritpion;
+                }
+                if (updateGalleryCard.Tags != null)
+                {
+                    galleryCardStore.Tags = updateGalleryCard.Tags;
+                }
 
-            return NoContent();
+                return Ok($"Gallery Card created: {galleryCardStore.Title}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unable to UPDATE a gallery card with ID: {id}.", ex);
+                return StatusCode(500, "There was an expection at UPDATE Gallery Controller");
+            }
         }
         [HttpDelete("{id}")]
         public IActionResult DeleteGalleryCard(int id)
         {
-            GalleryData.Current.DeleteGalleryCardById(id);
+            try
+            {
+                var galleryCard = GalleryData.Current.getCardById(id);
 
-            return NoContent();
+                if (galleryCard != null)
+                {
+                    GalleryData.Current.DeleteGalleryCardById(id);
+                    return Ok($"Gallery Card with Id: {id} has been deleted.");
+                }
+                return BadRequest($"The Gallery Card with ID: {id} does not exist.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unable to DELETE ID: {id} gallery card.", ex);
+                return StatusCode(500, "There was an expection at DELETE Gallery Controller");
+            }
         }
     }
 }

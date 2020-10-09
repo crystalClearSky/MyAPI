@@ -25,6 +25,7 @@ namespace MyAppAPI.Models
         {
             get
             {
+                GetAllLikesByAvatar();
                 return Likes.Count;
             }
         }
@@ -32,6 +33,7 @@ namespace MyAppAPI.Models
         {
             get
             {
+                GetAllVotesByAvatar();
                 return UpVotes.Count;
             }
         }
@@ -42,7 +44,7 @@ namespace MyAppAPI.Models
                 return Comments.Count();
             }
         }
-        public List<Like> Likes { get; set; }
+        public List<Like> Likes { get; set; } = new List<Like>();
         // public List<Comment> Comments { get; set; }
         private IEnumerable<Comment> _comments;
         public IEnumerable<Comment> Comments
@@ -73,7 +75,7 @@ namespace MyAppAPI.Models
         }
 
 
-        public List<Vote> UpVotes { get; set; }
+        public List<Vote> UpVotes { get; set; } = new List<Vote>();
 
         public IEnumerable<Comment> GetAllComments()
         {
@@ -109,6 +111,21 @@ namespace MyAppAPI.Models
         private void Sort()
         {
             _result.OrderBy(r => r.Id);
+        }
+
+        public void GetAllLikesByAvatar()
+        {
+            // ILike interface
+            ILike likeDb = new CommentData();
+            var likesForAvatar = likeDb.GetLikesByAvatar(this.Id);
+            this.Likes.AddRange(likesForAvatar);
+        }
+
+        public void GetAllVotesByAvatar()
+        {
+            IVote voteDb = new GalleryData();
+            var voteForAvatar = voteDb.GetVotesByAvatar(this.Id);
+            this.UpVotes.AddRange(voteForAvatar);
         }
     }
 }

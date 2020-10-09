@@ -41,16 +41,19 @@ namespace MyAppAPI.Models.GalleryModel
         }
 
 
-        private int _upVotes;
-        public int UpVotes
+        private int _upVotesCount;
+        public int UpVotesCount
         {
             get
             {
-                _upVotes = GetVotes();
-                return _upVotes;
+                _upVotesCount = UpVotes.Count;
+                return _upVotesCount;
             }
-            // set { _upVotes = value; }
+            
         }
+
+        public List<Vote> UpVotes { get; set; } = new List<Vote>();
+
         // private readonly IAvatarData avatarDb;
         public GalleryCard()
         {
@@ -61,12 +64,14 @@ namespace MyAppAPI.Models.GalleryModel
         //     this.avatarDb = avatarDb;
         // }
 
-        public int GetVotes()
-        {
-            IAvatarData avatarDB = new AvatarData();
-            var count = avatarDB.GetAllVotesForCard(this.Id);
-            return count;
-        }
+
+        // public int GetVotes()
+        // {
+        //     IAvatarData avatarDB = new AvatarData();
+        //     var count = avatarDB.GetAllVotesForCard(this.Id);
+        //     return count;
+        // }
+
         // Get comments for each GalleryCard ID
         public IEnumerable<Comment> GetComments()
         {

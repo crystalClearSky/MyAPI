@@ -1,3 +1,4 @@
+using System.Threading;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System;
@@ -8,7 +9,7 @@ using MyAppAPI.Models;
 
 namespace MyAppAPI.AppRepository
 {
-    public class GalleryData : IGalleryData
+    public class GalleryData : IGalleryData, IVote
     {
         public static GalleryData Current { get; } = new GalleryData();
         public List<GalleryCard> Cards { get; set; }
@@ -41,7 +42,31 @@ namespace MyAppAPI.AppRepository
                             // Id = 5,
                             TagItem = "lady",
                         }
+                    },
+                    UpVotes = new List<Vote>()
+                    {
+                        new Vote()
+                        {
+                            Id = 1,
+                            UpVote = true,
+                            VoteById = 2,
+                        },
+
+                        new Vote()
+                        {
+                            Id = 3,
+                            UpVote = true,
+                            VoteById = 1
+                        },
+                        new Vote()
+                        {
+                            Id = 7,
+                            UpVote = true,
+                            VoteById = 3
+                        }
                     }
+                    
+                    
                     
                     // Tag with #3dworks, #zbrush
                     
@@ -75,6 +100,23 @@ namespace MyAppAPI.AppRepository
                             // Id = 5,
                             TagItem = "crystal",
                         }
+                    },
+                    UpVotes = new List<Vote>()
+                    {
+                        new Vote()
+                        {
+                            Id = 2,
+                            UpVote = true,
+                            VoteById = 1
+                        },
+                        new Vote()
+                        {
+                            Id = 4,
+                            UpVote = true,
+                            VoteById = 2
+                        },
+
+
                     }
 
                 },
@@ -102,6 +144,17 @@ namespace MyAppAPI.AppRepository
                             // Id = 5,
                             TagItem = "zbrush",
                         }
+                    },
+                    UpVotes = new List<Vote>()
+                    {
+
+                        new Vote()
+                        {
+                            Id = 5,
+                            UpVote = true,
+                            VoteById = 3
+                        }
+
                     }
                 }
             };
@@ -184,13 +237,79 @@ namespace MyAppAPI.AppRepository
         public void DeleteGalleryCardById(int id)
         {
             var cardToDelete = GalleryData.Current.getCardById(id);
-            if(cardToDelete != null)
+            if (cardToDelete != null)
             {
                 GalleryData.Current.Cards.Remove(cardToDelete);
             }
         }
 
+        public bool AddVote(Avatar avatar, int id)
+        {
+            bool HasVoted = false;
+            bool votable = true;
+            var galleryCard = GalleryData.Current.getCardById(id);
+            var maxVoteId = GalleryData.Current.GetAllVotes().Max(v => v.Id) + 1;
+
+            foreach (var vote in galleryCard.UpVotes)
+            {
+                if (vote.VoteById == avatar.Id)
+                {
+                    votable = false;
+                }
+            }
+            if (votable)
+            {
+                var newVote = new Vote()
+                {
+                    Id = maxVoteId,
+                    UpVote = true,
+                    VoteById = avatar.Id
+                };
+                galleryCard.UpVotes.Add(newVote);
+                HasVoted = true;
+            }
+
+            return HasVoted;
+        }
+
+        public IEnumerable<Vote> GetVotesByAvatar(int id)
+        {
+            var result =
+            from gallery in GalleryData.Current.Cards
+            from votes in gallery.UpVotes
+            where votes.VoteById == id
+            select votes;
+
+            return result;
+        }
+
+        public void RemoveVote(Avatar avatar, int id)
+        {
+            var toRemove =
+            from gallery in GalleryData.Current.Cards
+            from votes in gallery.UpVotes
+            where votes.VoteById == avatar.Id
+            select votes;
+            var gCard = GalleryData.Current.getCardById(1);
+            gCard.UpVotes.RemoveAll(v =>v.VoteById == avatar.Id);
+            
+        }
 
         
+        public List<Vote> GetAllVotes()
+        {
+            var upVotes = GalleryData.Current.Cards.Select(g => g.UpVotes);
+            var allVotes = new List<Vote>();
+            foreach (var vote in upVotes)
+            {
+                foreach (var item in vote)
+                {
+                    allVotes.Add(item);
+                }
+            }
+
+            return allVotes;
+        }
+
     }
 }

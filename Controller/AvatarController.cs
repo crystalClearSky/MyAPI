@@ -1,4 +1,6 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MyAppAPI.AppRepository;
 using MyAppAPI.Models;
 using MyAppAPI.Models.GalleryModel.UpdateModel;
@@ -11,28 +13,46 @@ namespace MyAppAPI.Controller
     public class AvatarController : ControllerBase
     {
         private readonly IAvatarData avatarDb;
+        private readonly ILogger _logger;
 
-        public AvatarController(IAvatarData avatarDb)
+        public AvatarController(IAvatarData avatarDb, ILogger<AvatarController> logger)
         {
             this.avatarDb = avatarDb;
+            _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
 
         [HttpGet]
         public IActionResult GetAvatar()
         {
-            var avatars = AvatarData.CurrentAvatar.GetAllAvatars();
-            return Ok(avatars);
+            try
+            {
+              var avatars = AvatarData.CurrentAvatar.GetAllAvatars();
+              return Ok(avatars);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unable to retrieve any avatar data.", ex);
+                return StatusCode(500, "There was an expection found.");
+            }
         }
         [HttpGet("{id}")]
         public IActionResult GetAvatar(int id)
         {
-            var avatar = AvatarData.CurrentAvatar.GetAvatarById(id);
-            if (avatar == null)
+            try
             {
-                string message = $"The avatar with ID {id} does not exist!";
-                return NotFound(message);
+              var avatar = AvatarData.CurrentAvatar.GetAvatarById(id);
+              if (avatar == null)
+              {
+                  string message = $"The avatar with ID {id} does not exist!";
+                  return NotFound(message);
+              }
+              return Ok(avatar);
             }
-            return Ok(avatar);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unable to retrieve avatar ID: {id} data.", ex);
+                return StatusCode(500, "There was an expection found.");
+            }
         }
 
         // [HttpPut("{id}")]
@@ -57,8 +77,22 @@ namespace MyAppAPI.Controller
         [HttpDelete("{id}")]
         public IActionResult DeleteAvatar(int id)
         {
-            AvatarData.CurrentAvatar.DeleteAvatar(id);
-            return NoContent();
+            try
+            {
+              var avatar = AvatarData.CurrentAvatar.GetAvatarById(id);
+              if (avatar != null)
+              {
+                AvatarData.CurrentAvatar.DeleteAvatar(id);
+                return Ok($"Avatar with ID: {id} has been delete.");
+              }
+              return NotFound($"Avatar ID: {id} was not found.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unable to retrieve avatar ID: {id} for deletion.", ex);
+                return StatusCode(500, "There was an expection found.");
+            }
+            
         }
     }
 }

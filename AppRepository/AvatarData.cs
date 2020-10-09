@@ -26,126 +26,126 @@ namespace MyAppAPI.AppRepository
                 {
                     Id = 1,
                     CurrentIP = "192.168.101",
-                    Likes = new List<Like>()
-                    {
-                        new Like()
-                        {
-                            Id = 1,
-                            HasLiked = true
-                        },
-                        new Like()
-                        {
-                            Id = 5,
-                            HasLiked = true
-                        },
+                    // Likes = new List<Like>()
+                    // {
+                    //     new Like()
+                    //     {
+                    //         Id = 1,
+                    //         HasLiked = true
+                    //     },
+                    //     new Like()
+                    //     {
+                    //         Id = 5,
+                    //         HasLiked = true
+                    //     },
 
                         
-                    },
-                    UpVotes = new List<Vote>()
-                    {
-                        new Vote()
-                        {
-                            Id = 1,
-                            UpVote = true,
-                        },
+                    // },
+                    // UpVotes = new List<Vote>()
+                    // {
+                    //     new Vote()
+                    //     {
+                    //         Id = 1,
+                    //         UpVote = true,
+                    //     },
                         
-                        new Vote()
-                        {
-                            Id = 3,
-                            UpVote = true,
-                        }
-                    }
+                    //     new Vote()
+                    //     {
+                    //         Id = 3,
+                    //         UpVote = true,
+                    //     }
+                    // }
                 },
                 new Avatar()
                 {
                     Id = 2,
                     CurrentIP = "192.168.101",
-                    Likes = new List<Like>()
-                    {
+                    // Likes = new List<Like>()
+                    // {
                         
-                        new Like()
-                        {
-                            Id = 3,
-                            HasLiked = true
-                        }
-                    },
-                    UpVotes = new List<Vote>()
-                    {
-                        new Vote()
-                        {
-                            Id = 1,
-                            UpVote = true,
-                        },
-                        new Vote()
-                        {
-                            Id = 2,
-                            UpVote = true,
-                        },
+                    //     new Like()
+                    //     {
+                    //         Id = 3,
+                    //         HasLiked = true
+                    //     }
+                    // },
+                    // UpVotes = new List<Vote>()
+                    // {
+                    //     new Vote()
+                    //     {
+                    //         Id = 1,
+                    //         UpVote = true,
+                    //     },
+                    //     new Vote()
+                    //     {
+                    //         Id = 2,
+                    //         UpVote = true,
+                    //     },
                         
-                    }
+                    // }
                 },
                 new Avatar()
                 {
                     Id = 3,
                     CurrentIP = "192.168.101",
-                    Likes = new List<Like>()
-                    {
-                        new Like()
-                        {
-                            Id = 4,
-                            HasLiked = true,
-                        },
-                        new Like()
-                        {
-                            Id = 2,
-                            HasLiked = true
-                        },
-                        new Like()
-                        {
-                            Id = 6,
-                            HasLiked = true
-                        }
-                    },
-                    UpVotes = new List<Vote>()
-                    {
+                    // Likes = new List<Like>()
+                    // {
+                    //     new Like()
+                    //     {
+                    //         Id = 4,
+                    //         HasLiked = true,
+                    //     },
+                    //     new Like()
+                    //     {
+                    //         Id = 2,
+                    //         HasLiked = true
+                    //     },
+                    //     new Like()
+                    //     {
+                    //         Id = 6,
+                    //         HasLiked = true
+                    //     }
+                    // },
+                    // UpVotes = new List<Vote>()
+                    // {
                         
-                        new Vote()
-                        {
-                            Id = 2,
-                            UpVote = true,
-                        }
+                    //     new Vote()
+                    //     {
+                    //         Id = 2,
+                    //         UpVote = true,
+                    //     }
                    
-                    }
+                    // }
                 }
 
             };
         }
 
 
-        public int GetAllVotesForCard(int id)
-        {
-            var avatars = GetAllAvatars();
-            int count = 0;
-            var avatarVotes = avatars.Select(x => x.UpVotes);
+        // public int GetAllVotesForCard(int id)
+        // {
+        //     var avatars = GetAllAvatars();
+        //     int count = 0;
+        //     var avatarVotes = avatars.Select(x => x.UpVotes);
 
 
-            foreach (var likeGroups in avatarVotes)
-            {
-                var likeGroup = likeGroups.FindAll(x => x.Id == id);
-                foreach (var likeObject in likeGroup)
-                {
-                    if (likeObject.UpVote)
-                    {
-                        count++;
-                    }
-                }
-            }
-            Console.WriteLine("VOTES {0}", count);
-            var result = count;
+        //     foreach (var likeGroups in avatarVotes)
+        //     {
+        //         var likeGroup = likeGroups.FindAll(x => x.Id == id);
+        //         foreach (var likeObject in likeGroup)
+        //         {
+        //             if (likeObject.UpVote)
+        //             {
+        //                 count++;
+        //             }
+        //         }
+        //     }
+        //     Console.WriteLine("VOTES {0}", count);
+        //     var result = count;
 
 
-            return result;
-        }
+        //     return result;
+        // }
 
         public IEnumerable<Avatar> GetAllAvatars()
         {
@@ -157,34 +157,31 @@ namespace MyAppAPI.AppRepository
             return Avatars.FirstOrDefault(x => x.Id == id);
         }
 
-        public int GetAllLikesForCard(int id)
-        {
-            var avatars = GetAllAvatars();
-            int count = 0;
-            var avatarLikes = avatars.Select(x => x.Likes);
-            // Console.WriteLine("Step ONE has {0} for ID {1}", avatarLikes.Count(), id);
-            // var likes = avatarLikes.Select(x => x.Find(x => x.Id == id)).ToList();
-            // Console.WriteLine("Step TWO has {0} for ID {1}", likes.Count(), id);
-            // var hasLiked = likes.Select(x => x.HasLiked == true).ToList();
-            // Console.WriteLine("Step TWO has {0} for ID {1}", hasLiked.Count(), id);
-            // var result = hasLiked.Count();
-            foreach (var likeGroups in avatarLikes)
-            {
-                var likeGroup = likeGroups.FindAll(x => x.Id == id);
-                foreach (var likeObject in likeGroup)
-                {
-                    if (likeObject.HasLiked)
-                    {
-                        count++;
-                    }
-                }
-            }
-            Console.WriteLine("LIKES {0}", count);
-            var result = count;
+        // public int GetAllLikesForCard(int id)
+        // {
+        //     var avatars = GetAllAvatars();
+        //     int count = 0;
+        //     var avatarLikes = avatars.Select(x => x.Likes);
+            
 
 
-            return result;
-        }
+        //     foreach (var likeGroups in avatarLikes)
+        //     {
+        //         var likeGroup = likeGroups.FindAll(x => x.Id == id);
+        //         foreach (var likeObject in likeGroup)
+        //         {
+        //             if (likeObject.HasLiked)
+        //             {
+        //                 count++;
+        //             }
+        //         }
+        //     }
+        //     Console.WriteLine("LIKES {0}", count);
+        //     var result = count;
+
+
+        //     return result;
+        // }
 
         public void AddNewAvatar(string newIp)
         {

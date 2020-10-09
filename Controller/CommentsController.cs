@@ -8,6 +8,7 @@ using MyAppAPI.AppRepository;
 using MyAppAPI.Models;
 using MyAppAPI.Models.GalleryModel;
 using MyAppAPI.Services;
+using Microsoft.Extensions.Logging;
 
 namespace MyAppAPI.Controller
 {
@@ -17,17 +18,23 @@ namespace MyAppAPI.Controller
     {
         private readonly IAvatarData AvatarDb;
         private readonly ICommentData CommentDb;
+        private readonly ILogger _logger;
 
-        public CommentsController(IAvatarData avatarDb, ICommentData commentDb)
+        public CommentsController(IAvatarData avatarDb, ICommentData commentDb, ILogger<CommentsController> logger)
         {
             this.AvatarDb = avatarDb;
             this.CommentDb = commentDb;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
         public IActionResult GetComments(int avatarId)
         {
             var avatar = AvatarDb.GetAvatarById(avatarId);
+            if (avatar == null)
+            {
+                return NotFound($"Avatar with the ID: {avatarId} was not found.");
+            }
             var comments = avatar.Comments.OrderBy(c => c.Id);
             if (comments == null)
             {
@@ -41,13 +48,16 @@ namespace MyAppAPI.Controller
         public IActionResult GetComments(int avatarId, int id)
         {
             var avatar = AvatarDb.GetAvatarById(avatarId);
-            var comments = avatar.Comments.OrderBy(c => c.Id);
-            if (comments == null)
+
+            if (avatar == null)
             {
-                var message = $"No avatar for ID {avatarId} was found.";
+                var message = $"No avatar with ID {avatarId} was found.";
                 return NotFound(message);
             }
+
+            var comments = avatar.Comments.OrderBy(c => c.Id);
             var comment = comments.FirstOrDefault(c => c.Id == id);
+
             if (comment == null)
             {
                 var message = $"No comment with Id {id} was found.";
@@ -102,7 +112,7 @@ namespace MyAppAPI.Controller
             }
 
             var commentStore = CommentData.CurrentComments.GetCommentById(id);
-            if(comment == null)
+            if (comment == null)
             {
                 return NotFound("Data must be added for update.");
             }
@@ -110,7 +120,7 @@ namespace MyAppAPI.Controller
             commentStore.Message = comment.Message;
             commentStore.LastUpdatedOn = DateTime.UtcNow;
 
-            return NoContent();
+            return Ok($"Comment with ID: {id} has been updated.");
         }
         [HttpDelete("{id}")]
         public IActionResult DeleteComment(int avatarId, int id)

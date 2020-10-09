@@ -1,0 +1,48 @@
+2020-10-08 07:41:04.4184|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [CommentEntity] SET [AvatarId] = -1
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT; |url: |action: 
+2020-10-08 08:19:38.3422|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [CommentEntity] SET [AvatarId] = -1
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT; |url: |action: 
+2020-10-08 08:22:53.7653|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [CommentEntity] SET [AvatarId] = -1
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT; |url: |action: 
+2020-10-08 08:23:34.8691|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [CommentEntity] SET [AvatarId] = -1
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT; |url: |action: 
+2020-10-08 08:25:41.6243|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [CommentEntity] SET [AvatarId] = 0, [UserId] = 1
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT; |url: |action: 
+2020-10-08 08:33:29.2029|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AvatarId', N'CardId', N'IsSuperUser', N'LastUpdatedOn', N'Message', N'PostedOn', N'UserId') AND [object_id] = OBJECT_ID(N'[CommentEntity]'))
+    SET IDENTITY_INSERT [CommentEntity] ON;
+INSERT INTO [CommentEntity] ([Id], [AvatarId], [CardId], [IsSuperUser], [LastUpdatedOn], [Message], [PostedOn], [UserId])
+VALUES (8, NULL, 1, CAST(1 AS bit), '0001-01-01T00:00:00.0000000', N'SUPERUSER - I am the real ONE!', '0001-01-01T00:00:00.0000000', 2);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AvatarId', N'CardId', N'IsSuperUser', N'LastUpdatedOn', N'Message', N'PostedOn', N'UserId') AND [object_id] = OBJECT_ID(N'[CommentEntity]'))
+    SET IDENTITY_INSERT [CommentEntity] OFF; |url: |action: 
+2020-10-08 08:37:10.0693|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AvatarId', N'CardId', N'IsSuperUser', N'LastUpdatedOn', N'Message', N'PostedOn', N'UserId') AND [object_id] = OBJECT_ID(N'[CommentEntity]'))
+    SET IDENTITY_INSERT [CommentEntity] ON;
+INSERT INTO [CommentEntity] ([Id], [AvatarId], [CardId], [IsSuperUser], [LastUpdatedOn], [Message], [PostedOn], [UserId])
+VALUES (8, NULL, 1, CAST(1 AS bit), '0001-01-01T00:00:00.0000000', N'SUPERUSER - I am the real ONE!', '0001-01-01T00:00:00.0000000', 2);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AvatarId', N'CardId', N'IsSuperUser', N'LastUpdatedOn', N'Message', N'PostedOn', N'UserId') AND [object_id] = OBJECT_ID(N'[CommentEntity]'))
+    SET IDENTITY_INSERT [CommentEntity] OFF; |url: |action: 
+2020-10-08 08:43:05.5520|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AvatarId', N'CardId', N'IsSuperUser', N'LastUpdatedOn', N'Message', N'PostedOn', N'UserId') AND [object_id] = OBJECT_ID(N'[CommentEntity]'))
+    SET IDENTITY_INSERT [CommentEntity] ON;
+INSERT INTO [CommentEntity] ([Id], [AvatarId], [CardId], [IsSuperUser], [LastUpdatedOn], [Message], [PostedOn], [UserId])
+VALUES (8, NULL, 1, CAST(1 AS bit), '0001-01-01T00:00:00.0000000', N'SUPERUSER - I am the real ONE!', '0001-01-01T00:00:00.0000000', 2);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'AvatarId', N'CardId', N'IsSuperUser', N'LastUpdatedOn', N'Message', N'PostedOn', N'UserId') AND [object_id] = OBJECT_ID(N'[CommentEntity]'))
+    SET IDENTITY_INSERT [CommentEntity] OFF; |url: |action: 
+2020-10-08 08:58:32.8436|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [CommentEntity] ADD CONSTRAINT [FK_CommentEntity_UserEntity_UserId] FOREIGN KEY ([UserId]) REFERENCES [UserEntity] ([Id]) ON DELETE CASCADE; |url: |action: 
+2020-10-08 09:44:00.7335|10612|WARN|Microsoft.EntityFrameworkCore.Model|Navigations 'CommentEntity.ReplyOn' and 'ReplyEntity.Reply' were separated into two relationships as [ForeignKey] attribute was specified on navigations on both sides. |url: |action: 
+2020-10-08 09:48:43.1360|20102|ERROR|Microsoft.EntityFrameworkCore.Database.Command|Failed executing DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [CommentEntity] SET [AvatarId] = 0
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT; |url: |action: 

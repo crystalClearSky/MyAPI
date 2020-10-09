@@ -7,26 +7,30 @@ using MyAppAPI.Services;
 using Xunit;
 using Xunit.Abstractions;
 using System;
+using MyAppAPI.Context;
 
 public class TectClass
 {
     private readonly ITestOutputHelper output;
 
-    public TectClass(ITestOutputHelper output)
+    private readonly ContentContext ctx;
+
+    public TectClass(ITestOutputHelper output, ContentContext ctx)
     {
+        this.ctx = ctx;
         this.output = output;
     }
-    [Fact]
-    public void GalleryCardCount_Test()
-    {
-        //Given
-        IAvatarData db = new AvatarData();
-        int likes = db.GetAllVotesForCard(2);
-        //When
-        output.WriteLine("Number {0}", likes);
-        //Then
-        // Assert.Equal(1, likes);
-    }
+    // [Fact]
+    // public void GalleryCardCount_Test()
+    // {
+    //     //Given
+    //     IAvatarData db = new AvatarData();
+    //     int likes = db.GetAllVotesForCard(2);
+    //     //When
+    //     output.WriteLine("Number {0}", likes);
+    //     //Then
+    //     // Assert.Equal(1, likes);
+    // }
     [Fact]
     public void GalleryCard_Test()
     {
@@ -40,7 +44,7 @@ public class TectClass
         //When
 
         // Assert.Equal("Revenge of Koria", gallery.Title);
-        Assert.Equal(3, gallery.UpVotes);
+        Assert.Equal(3, gallery.UpVotesCount);
 
         //Then
     }
@@ -152,63 +156,111 @@ public class TectClass
     [Fact]
     public void DeletAvatar_Test()
     {
-    //Given
-    var avatarToDelete = AvatarData.CurrentAvatar.GetAvatarById(1);
-    AvatarData.CurrentAvatar.Avatars.Remove(avatarToDelete);
-    var avatars = AvatarData.CurrentAvatar.GetAllAvatars();
-    //When
-    foreach (var avatar in avatars)
-    {
-        output.WriteLine("ID:{0}", avatar.Id);
-    }
-    //Then
+        //Given
+        var avatarToDelete = AvatarData.CurrentAvatar.GetAvatarById(1);
+        AvatarData.CurrentAvatar.Avatars.Remove(avatarToDelete);
+        var avatars = AvatarData.CurrentAvatar.GetAllAvatars();
+        //When
+        foreach (var avatar in avatars)
+        {
+            output.WriteLine("ID:{0}", avatar.Id);
+        }
+        //Then
 
-    Assert.Equal(2, avatars.Count());
+        Assert.Equal(2, avatars.Count());
     }
     [Fact]
     public void AddAvatar_Test()
     {
-    //Given
-    AvatarData.CurrentAvatar.AddNewAvatar("192.168.105");
-    var avatars = AvatarData.CurrentAvatar.GetAllAvatars();
-    //When
-    foreach (var avatar in avatars)
-    {
-        output.WriteLine("ID: {0}", avatar.Id);
-    }
-    //Then
-    Assert.Equal(4, avatars.Count());
+        //Given
+        AvatarData.CurrentAvatar.AddNewAvatar("192.168.105");
+        var avatars = AvatarData.CurrentAvatar.GetAllAvatars();
+        //When
+        foreach (var avatar in avatars)
+        {
+            output.WriteLine("ID: {0}", avatar.Id);
+        }
+        //Then
+        Assert.Equal(4, avatars.Count());
     }
     [Fact]
     public void GetLikesByAvatar_Test()
     {
-    //Given
-    
-    var likes = CommentData.CurrentComments.GetLikes(1); //GetLikesForAvatarById
-    //When
-    foreach (var like in likes)
-    {
-        output.WriteLine("ID: {0} LikedBy: {1}", like.Id, like.LikedById);
-    }
-    //Then
-    Assert.Equal(2, likes.Count());
-    }
-   [Fact]
-   public void AddLikeToConent_Test()
-   {
-   //Given
-   var avatar = AvatarData.CurrentAvatar.GetAvatarById(3);
-   var done = CommentData.CurrentComments.AddLikeToContent(avatar, 9);
-   // Check for result
-   var comment = CommentData.CurrentComments.GetCommentById(9);
-   //When
-   output.WriteLine("{0}", done);
-   foreach (var like in comment.Likes)
-   {
-       output.WriteLine("Comment:{0} Id:{1}, Liked By:{2}",comment.Id, like.Id, like.LikedById);
-   }
-   //Then
-   Assert.Equal(2, comment.Likes.Count);
-   }
+        //Given
 
+        var likes = CommentData.CurrentComments.GetLikesByAvatar(3); //GetLikesForAvatarById
+                                                                     //When
+        foreach (var like in likes)
+        {
+            output.WriteLine("ID: {0} LikedBy: {1}", like.Id, like.LikedById);
+        }
+        //Then
+        Assert.Equal(2, likes.Count());
+    }
+    [Fact]
+    public void AddLikeToConent_Test()
+    {
+        //Given
+        var avatar = AvatarData.CurrentAvatar.GetAvatarById(3);
+        var done = CommentData.CurrentComments.AddLikeToContent(avatar, 9);
+        // Check for result
+        var comment = CommentData.CurrentComments.GetCommentById(9);
+        //When
+        output.WriteLine("{0}", done);
+        foreach (var like in comment.Likes)
+        {
+            output.WriteLine("Comment:{0} Id:{1}, Liked By:{2}", comment.Id, like.Id, like.LikedById);
+        }
+        //Then
+        Assert.Equal(2, comment.Likes.Count);
+    }
+
+    [Fact]
+    public void GetCommentsLikedByAvatar_Test()
+    {
+        //Given
+        var comments = CommentData.CurrentComments.GetCommentsLikedByAvatar(1
+        );
+        //When
+        foreach (var comment in comments)
+        {
+            output.WriteLine("ID: {0}, Message: {1}", comment.Id, comment.Message);
+        }
+        //Then
+        Assert.Equal(1, comments.Count());
+    }
+    [Fact]
+    public void RemoveVote_Test()
+    {
+        //Given
+        var avatar = AvatarData.CurrentAvatar.GetAvatarById(1);
+        GalleryData.Current.RemoveVote(avatar, 1);
+        var gCard = GalleryData.Current.getCardById(1);
+        //When
+        foreach (var item in gCard.UpVotes)
+        {
+            output.WriteLine("ID: {0}, By: {1}", item.Id, item.VoteById);
+        }
+        if (gCard.UpVotes == null)
+        {
+            output.WriteLine("No Vote was found for ID: {0}", gCard.Id);
+        }
+        //Then
+        Assert.Equal(1, gCard.UpVotes.Count);
+    }
+
+    [Fact]
+    public void GetAvatarsThatLikeThisComment_Test()
+    {
+        //Given
+        var avatars = CommentData.CurrentComments.GetAvatarsThatLikeThisComment(3);
+        //When
+        foreach (var avatar in avatars)
+        {
+            output.WriteLine("IP: {0}", avatar.CurrentIP);
+        }
+        //Then
+        Assert.Equal(2, avatars.Count);
+    }
+    
 }
