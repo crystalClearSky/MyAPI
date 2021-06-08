@@ -1,0 +1,7 @@
+*.log
+*.dll
+**/bin/
+obj.*
+*.json
+Migrations.*
+*.tmp

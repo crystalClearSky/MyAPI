@@ -19,12 +19,502 @@ namespace MyAppApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0-rc.1.20451.13");
 
-            modelBuilder.Entity("MyAppAPI.Entities.AvatarEntity", b =>
+            modelBuilder.Entity("Entities.AnonymousEntity", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<DateTime>("FirstSeen")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastSeen")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AnonymousEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstSeen = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastSeen = new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("Entities.ContactEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<bool>("IsSent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Subject")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("TimeSent")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactEntity");
+                });
+
+            modelBuilder.Entity("Entities.EnableOptionsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("EnableGuest")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FirstSeen")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAnonymous")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLiving")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMember")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUnregistered")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastSeen")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VisitCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EnableOptionsEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EnableGuest = false,
+                            FirstSeen = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IpAddress = "192.168.0.102",
+                            IsAnonymous = false,
+                            IsLiving = false,
+                            IsMember = true,
+                            IsUnregistered = false,
+                            LastSeen = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VisitCount = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            EnableGuest = false,
+                            FirstSeen = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IpAddress = "192.168.0.101",
+                            IsAnonymous = false,
+                            IsLiving = false,
+                            IsMember = true,
+                            IsUnregistered = false,
+                            LastSeen = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VisitCount = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            EnableGuest = false,
+                            FirstSeen = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IpAddress = "192.168.0.108",
+                            IsAnonymous = false,
+                            IsLiving = false,
+                            IsMember = true,
+                            IsUnregistered = false,
+                            LastSeen = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            VisitCount = 0
+                        });
+                });
+
+            modelBuilder.Entity("Entities.GuestEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FirstVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IPAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GuestEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Country = "Japan",
+                            FirstVisit = new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IPAddress = "192.168.0.101",
+                            LastVisit = new DateTime(2021, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Region = "Tokyo"
+                        });
+                });
+
+            modelBuilder.Entity("Entities.ImageEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CardEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Catergory")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuickDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UploadedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardEntityId");
+
+                    b.ToTable("ImageEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CardEntityId = 1,
+                            Catergory = 0,
+                            ImageUrl = "https://cdna.artstation.com/p/assets/images/images/004/404/208/medium/justice-headbush-ladywip.jpg?1483463051",
+                            QuickDescription = "Practise practise practise.",
+                            ThumbnailUrl = "https://cdna.artstation.com/p/assets/images/images/004/404/208/medium/justice-headbush-ladywip.jpg?1483463051",
+                            UpdatedOn = new DateTime(2020, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UploadedOn = new DateTime(2020, 12, 23, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CardEntityId = 2,
+                            Catergory = 0,
+                            ImageUrl = "https://cdna.artstation.com/p/assets/images/images/000/445/632/medium/justice-headbush-5fe06d791b271f6d0d1b1cd14d44c4c8.jpg?1422789505",
+                            QuickDescription = "Lots of work but great outcome.",
+                            ThumbnailUrl = "https://cdnb.artstation.com/p/assets/images/images/000/445/633/large/justice-headbush-9d9f84a6298e17bf294bd02dc901dd95.jpg?1422789508",
+                            UpdatedOn = new DateTime(2020, 12, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UploadedOn = new DateTime(2020, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CardEntityId = 3,
+                            Catergory = 0,
+                            ImageUrl = "https://cdnb.artstation.com/p/assets/images/images/000/445/633/large/justice-headbush-9d9f84a6298e17bf294bd02dc901dd95.jpg?1422789508",
+                            QuickDescription = "A model which i created during my spare time.",
+                            ThumbnailUrl = "https://cdnb.artstation.com/p/assets/images/images/000/445/633/large/justice-headbush-9d9f84a6298e17bf294bd02dc901dd95.jpg?1422789508",
+                            UpdatedOn = new DateTime(2020, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UploadedOn = new DateTime(2020, 11, 28, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CardEntityId = 1,
+                            Catergory = 0,
+                            ImageUrl = "https://cdna.artstation.com/p/assets/images/images/000/445/652/large/justice-headbush-t.jpg?1422790444",
+                            QuickDescription = "More zbrush practise work.",
+                            ThumbnailUrl = "https://cdna.artstation.com/p/assets/images/images/000/445/652/large/justice-headbush-t.jpg?1422790444",
+                            UpdatedOn = new DateTime(2020, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UploadedOn = new DateTime(2020, 11, 29, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CardEntityId = 2,
+                            Catergory = 2,
+                            ImageUrl = "https://vimeo.com/83443121",
+                            QuickDescription = "Entity Framework Best Practices - Should EFCore Be Your Data Access of Choice?",
+                            ThumbnailUrl = "https://i.vimeocdn.com/video/459920343_640.jpg",
+                            UpdatedOn = new DateTime(2021, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UploadedOn = new DateTime(2021, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CardEntityId = 4,
+                            Catergory = 0,
+                            ImageUrl = "",
+                            QuickDescription = "",
+                            ThumbnailUrl = "https://cdna.artstation.com/p/assets/images/images/034/796/486/large/daniel-kho-lux-wip13.jpg?1613253409",
+                            UpdatedOn = new DateTime(2021, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UploadedOn = new DateTime(2021, 2, 8, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("Entities.LinkEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("AddedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CommentEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LinkIndex")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LinkType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentEntityId");
+
+                    b.ToTable("LinkEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddedOn = new DateTime(2021, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CommentEntityId = 2,
+                            Link = "https://media.giphy.com/media/mYiBd0ttjosz6/giphy.gif",
+                            LinkIndex = "img[0]",
+                            LinkType = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddedOn = new DateTime(2021, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CommentEntityId = 2,
+                            Link = "https://media.giphy.com/media/HoM8C39iqS9H2/giphy.gif",
+                            LinkIndex = "img[1]",
+                            LinkType = 3
+                        });
+                });
+
+            modelBuilder.Entity("Entities.PageEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("PageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PageEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PageName = "Content"
+                        });
+                });
+
+            modelBuilder.Entity("Entities.UniqueVisitEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("AnonymousId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AvatarVisited")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GuestVisited")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeVisited")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UnregisteredGuestVisited")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnonymousId");
+
+                    b.HasIndex("AvatarVisited");
+
+                    b.HasIndex("GuestVisited");
+
+                    b.HasIndex("PageId");
+
+                    b.HasIndex("UnregisteredGuestVisited")
+                        .IsUnique()
+                        .HasFilter("[UnregisteredGuestVisited] IS NOT NULL");
+
+                    b.ToTable("UniqueVisitEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AvatarVisited = 1,
+                            PageId = 1,
+                            TimeVisited = new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AvatarVisited = 1,
+                            PageId = 1,
+                            TimeVisited = new DateTime(2021, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("Entities.UnregisteredGuestEnitity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EnableGuest")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FirstVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastVisit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnregisteredGuestEnitity");
+                });
+
+            modelBuilder.Entity("Entities.ViewEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("AnonymousId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CardEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FirstSeen")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastSeen")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfTimesSeen")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ViewedByAvatarId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ViewedByGuestId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ViewedByUnregisteredGuest")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnonymousId");
+
+                    b.HasIndex("CardEntityId");
+
+                    b.HasIndex("ViewedByAvatarId");
+
+                    b.HasIndex("ViewedByGuestId");
+
+                    b.HasIndex("ViewedByUnregisteredGuest");
+
+                    b.ToTable("ViewEntity");
+                });
+
+            modelBuilder.Entity("MyAppAPI.Entities.AvatarEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("AvatarId")
+                        .HasColumnType("int");
 
                     b.Property<string>("AvatarImgUrl")
                         .HasColumnType("nvarchar(max)");
@@ -32,13 +522,26 @@ namespace MyAppApi.Migrations
                     b.Property<string>("CurrentIP")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("GuestId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsCheckedIn")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("LastCheckedIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AvatarId");
+
+                    b.HasIndex("GuestId");
 
                     b.ToTable("AvatarEntity");
 
@@ -46,26 +549,33 @@ namespace MyAppApi.Migrations
                         new
                         {
                             Id = 1,
-                            AvatarImgUrl = "avatar.jpg",
+                            AvatarImgUrl = "Apple.svg",
                             CurrentIP = "192.168.0.101",
+                            GuestId = 1,
                             IsCheckedIn = true,
-                            JoinedOn = new DateTime(2020, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            JoinedOn = new DateTime(2020, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastCheckedIn = new DateTime(2020, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Apple"
                         },
                         new
                         {
                             Id = 2,
-                            AvatarImgUrl = "avatar.jpg",
+                            AvatarImgUrl = "Avocado.svg",
                             CurrentIP = "192.168.0.102",
                             IsCheckedIn = false,
-                            JoinedOn = new DateTime(2020, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            JoinedOn = new DateTime(2020, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastCheckedIn = new DateTime(2020, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Avocado"
                         },
                         new
                         {
                             Id = 3,
-                            AvatarImgUrl = "avatar.jpg",
+                            AvatarImgUrl = "Banana.svg",
                             CurrentIP = "192.168.0.108",
                             IsCheckedIn = false,
-                            JoinedOn = new DateTime(2020, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            JoinedOn = new DateTime(2020, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastCheckedIn = new DateTime(2020, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Banana"
                         });
                 });
 
@@ -76,32 +586,46 @@ namespace MyAppApi.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descritpion")
+                    b.Property<string>("Description")
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<bool>("Flag")
+                    b.Property<bool>("IsSuperUser")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PageEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ReplyBoxIsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SearchIndexValue")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TagIsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("IsSuperUser");
+
+                    b.HasIndex("PageEntityId");
 
                     b.ToTable("CardEntity");
 
@@ -109,24 +633,55 @@ namespace MyAppApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2020, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descritpion = "A story about a princess you travels the world on a mission to find dragons.",
-                            Flag = false,
-                            ImageUrl = "image.jpg",
+                            CreatedOn = new DateTime(2020, 11, 10, 19, 23, 5, 0, DateTimeKind.Unspecified),
+                            Description = "A story about a princess you travels the world on a mission to find dragons.",
+                            IsSuperUser = true,
+                            PostType = 0,
+                            ReplyBoxIsActive = false,
+                            SearchIndexValue = 0,
+                            TagIsActive = false,
                             Title = "Return of Golia",
-                            UpdatedOn = new DateTime(2020, 10, 8, 14, 54, 51, 979, DateTimeKind.Local).AddTicks(6106),
-                            UserId = 1
+                            UpdatedOn = new DateTime(2021, 5, 26, 17, 34, 8, 110, DateTimeKind.Local).AddTicks(4745)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2020, 7, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Descritpion = "A storm is approaching and this is just the beginning of something big.",
-                            Flag = false,
-                            ImageUrl = "image.jpg",
-                            Title = "Thunder and Lighting",
-                            UpdatedOn = new DateTime(2020, 10, 8, 14, 54, 51, 979, DateTimeKind.Local).AddTicks(7188),
-                            UserId = 1
+                            CreatedOn = new DateTime(2020, 7, 19, 16, 20, 8, 0, DateTimeKind.Unspecified),
+                            Description = "A storm is approaching and this is just the beginning of something big.",
+                            IsSuperUser = true,
+                            PostType = 0,
+                            ReplyBoxIsActive = false,
+                            SearchIndexValue = 0,
+                            TagIsActive = false,
+                            Title = "Thunder & Lighting",
+                            UpdatedOn = new DateTime(2021, 5, 26, 17, 34, 8, 110, DateTimeKind.Local).AddTicks(5877)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedOn = new DateTime(2020, 7, 19, 10, 18, 15, 0, DateTimeKind.Unspecified),
+                            Description = "A storm is approaching and this is just the beginning of something big.",
+                            IsSuperUser = true,
+                            PostType = 0,
+                            ReplyBoxIsActive = false,
+                            SearchIndexValue = 0,
+                            TagIsActive = false,
+                            Title = "Return of Repunzal",
+                            UpdatedOn = new DateTime(2021, 5, 26, 17, 34, 8, 110, DateTimeKind.Local).AddTicks(5923)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Content = "Here are some works I found that I like from http://www.artstation.com https://cdna.artstation.com/p/assets/images/images/034/796/486/large/daniel-kho-lux-wip13.jpg?1613253409 And a little more text https://cdna.artstation.com/p/assets/images/images/035/653/308/large/qing-xu-.jpg?1615523280",
+                            CreatedOn = new DateTime(2021, 2, 19, 15, 35, 45, 0, DateTimeKind.Unspecified),
+                            Description = "This is a blog discussing works found on artstation.",
+                            IsSuperUser = true,
+                            PostType = 1,
+                            ReplyBoxIsActive = false,
+                            SearchIndexValue = 0,
+                            TagIsActive = false,
+                            Title = "Discovering of Amazing 3D Works From ArtStation",
+                            UpdatedOn = new DateTime(2021, 5, 26, 17, 34, 8, 110, DateTimeKind.Local).AddTicks(5930)
                         });
                 });
 
@@ -140,14 +695,26 @@ namespace MyAppApi.Migrations
                     b.Property<int?>("AvatarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CardId")
+                    b.Property<int>("CardEntityId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsSuperUser")
+                    b.Property<string>("FlaggedCommentMessages")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReply")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsSuperUser")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastUpdatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Medium")
+                        .HasColumnType("int");
 
                     b.Property<string>("Message")
                         .HasMaxLength(200)
@@ -156,16 +723,24 @@ namespace MyAppApi.Migrations
                     b.Property<DateTime>("PostedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("ReplyToCommentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ResponseToAvatarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SearchIndexValue")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AvatarId");
 
-                    b.HasIndex("CardId");
+                    b.HasIndex("CardEntityId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("IsSuperUser");
+
+                    b.HasIndex("ReplyToCommentId");
 
                     b.ToTable("CommentEntity");
 
@@ -174,71 +749,206 @@ namespace MyAppApi.Migrations
                         {
                             Id = 1,
                             AvatarId = 2,
-                            CardId = 1,
-                            IsSuperUser = false,
+                            CardEntityId = 1,
+                            FlaggedCommentMessages = "Spam",
+                            IsActive = false,
+                            IsReply = false,
                             LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Medium = 0,
                             Message = "This is great work!!",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SearchIndexValue = 0
                         },
                         new
                         {
                             Id = 2,
                             AvatarId = 2,
-                            CardId = 1,
-                            IsSuperUser = false,
+                            CardEntityId = 1,
+                            IsActive = false,
+                            IsReply = false,
                             LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Message = "You deserve a prize!!",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Medium = 0,
+                            Message = "You deserve a prize!! &img[0] and this &img[1]",
+                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SearchIndexValue = 0
                         },
                         new
                         {
                             Id = 3,
                             AvatarId = 3,
-                            CardId = 1,
-                            IsSuperUser = false,
+                            CardEntityId = 1,
+                            IsActive = false,
+                            IsReply = true,
                             LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Medium = 0,
                             Message = "I Totally agree!",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReplyToCommentId = 2,
+                            ResponseToAvatarId = 2,
+                            SearchIndexValue = 0
                         },
                         new
                         {
                             Id = 4,
                             AvatarId = 1,
-                            CardId = 1,
-                            IsSuperUser = false,
+                            CardEntityId = 1,
+                            IsActive = false,
+                            IsReply = false,
                             LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Medium = 0,
                             Message = "Nice lady character!",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SearchIndexValue = 0
                         },
                         new
                         {
                             Id = 5,
                             AvatarId = 2,
-                            CardId = 1,
-                            IsSuperUser = false,
+                            CardEntityId = 1,
+                            IsActive = false,
+                            IsReply = true,
                             LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Medium = 0,
                             Message = "Ya, Pretty cool lady",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReplyToCommentId = 4,
+                            ResponseToAvatarId = 1,
+                            SearchIndexValue = 0
                         },
                         new
                         {
                             Id = 6,
                             AvatarId = 3,
-                            CardId = 1,
-                            IsSuperUser = false,
+                            CardEntityId = 1,
+                            IsActive = false,
+                            IsReply = true,
                             LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Medium = 0,
                             Message = "This 3D lady is awesome!!",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReplyToCommentId = 5,
+                            ResponseToAvatarId = 2,
+                            SearchIndexValue = 0
+                        });
+                });
+
+            modelBuilder.Entity("MyAppAPI.Entities.FlagEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("AvatarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommentEntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReasonText")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("CommentEntityId");
+
+                    b.ToTable("FlagEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            AvatarId = 1,
+                            CommentEntityId = 1,
+                            ReasonText = "Just because I like it so much!"
+                        });
+                });
+
+            modelBuilder.Entity("MyAppAPI.Entities.FruitItemsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("FruitImg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FruitName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FruitItemsEntity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FruitImg = "Broccoli.svg",
+                            FruitName = "Broccoli"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FruitImg = "Cactus.svg",
+                            FruitName = "Cactus"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FruitImg = "Citrus.svg",
+                            FruitName = "Citrus"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FruitImg = "Grapes.svg",
+                            FruitName = "Grapes"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FruitImg = "Hazelnut.svg",
+                            FruitName = "Hazelnut"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FruitImg = "Melon.svg",
+                            FruitName = "Melon"
                         },
                         new
                         {
                             Id = 7,
-                            CardId = 1,
-                            IsSuperUser = true,
-                            LastUpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Message = "SuperUser - Thanks for the compliments!",
-                            PostedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = 1
+                            FruitImg = "Nut.svg",
+                            FruitName = "Nut"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            FruitImg = "Pear.svg",
+                            FruitName = "Pear"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            FruitImg = "Plum.svg",
+                            FruitName = "Plum"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            FruitImg = "Pomegranate.svg",
+                            FruitName = "Pomegranate"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            FruitImg = "Raspberry.svg",
+                            FruitName = "Raspberry"
                         });
                 });
 
@@ -249,9 +959,6 @@ namespace MyAppApi.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("AvatarId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CommentId")
                         .HasColumnType("int");
 
@@ -261,14 +968,11 @@ namespace MyAppApi.Migrations
                     b.Property<int>("LikedById")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LikedId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CommentId");
 
-                    b.HasIndex("LikedId");
+                    b.HasIndex("LikedById");
 
                     b.ToTable("LikeEntity");
 
@@ -276,7 +980,6 @@ namespace MyAppApi.Migrations
                         new
                         {
                             Id = 1,
-                            AvatarId = 0,
                             CommentId = 1,
                             HasLiked = true,
                             LikedById = 2
@@ -285,71 +988,32 @@ namespace MyAppApi.Migrations
 
             modelBuilder.Entity("MyAppAPI.Entities.ReplyEntity", b =>
                 {
-                    b.Property<int>("AvatarId")
+                    b.Property<int?>("AvatarId")
                         .HasColumnType("int");
 
                     b.Property<int>("CommentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AvatarEnityId")
+                    b.Property<int?>("AvatarEntityId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasReplied")
+                    b.Property<bool?>("IsSuperUser")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("ResponseId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("ResponseToCommentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("AvatarId", "CommentId");
 
-                    b.HasIndex("AvatarEnityId");
+                    b.HasIndex("AvatarEntityId");
 
                     b.HasIndex("CommentId");
 
-                    b.HasIndex("ResponseId")
-                        .IsUnique()
-                        .HasFilter("[ResponseId] IS NOT NULL");
+                    b.HasIndex("IsSuperUser");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ResponseToCommentId");
 
                     b.ToTable("ReplyEntity");
-
-                    b.HasData(
-                        new
-                        {
-                            AvatarId = 3,
-                            CommentId = 2,
-                            HasReplied = true,
-                            ResponseToCommentId = 2
-                        },
-                        new
-                        {
-                            AvatarId = 2,
-                            CommentId = 5,
-                            HasReplied = true,
-                            ResponseToCommentId = 5
-                        },
-                        new
-                        {
-                            AvatarId = 3,
-                            CommentId = 6,
-                            HasReplied = true,
-                            ResponseToCommentId = 5
-                        },
-                        new
-                        {
-                            AvatarId = 0,
-                            CommentId = 7,
-                            HasReplied = true,
-                            ResponseToCommentId = 1,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.TagEntity", b =>
@@ -359,17 +1023,23 @@ namespace MyAppApi.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("ByAvatarId")
+                    b.Property<int?>("ByAvatarId")
                         .HasColumnType("int");
 
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CardsWithThisId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsSuperUser")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TagItem")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -377,7 +1047,7 @@ namespace MyAppApi.Migrations
 
                     b.HasIndex("CardId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("IsSuperUser");
 
                     b.ToTable("TagEntity");
 
@@ -387,6 +1057,8 @@ namespace MyAppApi.Migrations
                             Id = 1,
                             ByAvatarId = 3,
                             CardId = 1,
+                            CardsWithThisId = 0,
+                            IsActive = false,
                             TagItem = "golia"
                         },
                         new
@@ -394,6 +1066,8 @@ namespace MyAppApi.Migrations
                             Id = 2,
                             ByAvatarId = 3,
                             CardId = 1,
+                            CardsWithThisId = 0,
+                            IsActive = false,
                             TagItem = "zbrush"
                         },
                         new
@@ -401,6 +1075,8 @@ namespace MyAppApi.Migrations
                             Id = 3,
                             ByAvatarId = 2,
                             CardId = 1,
+                            CardsWithThisId = 0,
+                            IsActive = false,
                             TagItem = "story"
                         },
                         new
@@ -408,6 +1084,8 @@ namespace MyAppApi.Migrations
                             Id = 4,
                             ByAvatarId = 1,
                             CardId = 1,
+                            CardsWithThisId = 0,
+                            IsActive = false,
                             TagItem = "dragon"
                         },
                         new
@@ -415,19 +1093,46 @@ namespace MyAppApi.Migrations
                             Id = 5,
                             ByAvatarId = 2,
                             CardId = 2,
+                            CardsWithThisId = 0,
+                            IsActive = false,
                             TagItem = "crystal"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ByAvatarId = 2,
+                            CardId = 1,
+                            CardsWithThisId = 0,
+                            IsActive = false,
+                            TagItem = "3dworks"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ByAvatarId = 2,
+                            CardId = 2,
+                            CardsWithThisId = 0,
+                            IsActive = false,
+                            TagItem = "3dworks"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ByAvatarId = 2,
+                            CardId = 3,
+                            CardsWithThisId = 0,
+                            IsActive = false,
+                            TagItem = "3dworks"
                         });
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.UserEntity", b =>
                 {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<bool>("IsSuperUser")
+                    b.Property<bool>("Id")
                         .HasColumnType("bit");
+
+                    b.Property<string>("AvatarImgUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -439,8 +1144,8 @@ namespace MyAppApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            IsSuperUser = true,
+                            Id = true,
+                            AvatarImgUrl = "Watermelon.svg",
                             Name = "Justice"
                         });
                 });
@@ -455,15 +1160,17 @@ namespace MyAppApi.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("UpVote")
-                        .HasColumnType("bit");
+                    b.Property<int?>("VoteByGuest")
+                        .HasColumnType("int");
 
-                    b.Property<int>("VoteById")
+                    b.Property<int?>("VoteById")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CardId");
+
+                    b.HasIndex("VoteByGuest");
 
                     b.HasIndex("VoteById");
 
@@ -474,18 +1181,120 @@ namespace MyAppApi.Migrations
                         {
                             Id = 1,
                             CardId = 1,
-                            UpVote = true,
                             VoteById = 2
                         });
+                });
+
+            modelBuilder.Entity("Entities.ImageEntity", b =>
+                {
+                    b.HasOne("MyAppAPI.Entities.CardEntity", null)
+                        .WithMany("Images")
+                        .HasForeignKey("CardEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.LinkEntity", b =>
+                {
+                    b.HasOne("MyAppAPI.Entities.CommentEntity", null)
+                        .WithMany("Links")
+                        .HasForeignKey("CommentEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.UniqueVisitEntity", b =>
+                {
+                    b.HasOne("Entities.AnonymousEntity", "AnonymousView")
+                        .WithMany("UniqueVisitEntity")
+                        .HasForeignKey("AnonymousId");
+
+                    b.HasOne("MyAppAPI.Entities.AvatarEntity", "AvatarEntity")
+                        .WithMany("UniqueVisitEntity")
+                        .HasForeignKey("AvatarVisited");
+
+                    b.HasOne("Entities.GuestEntity", "GuestEntity")
+                        .WithMany("UniqueVisitEntity")
+                        .HasForeignKey("GuestVisited");
+
+                    b.HasOne("Entities.PageEntity", "PageEntity")
+                        .WithMany("UniqueVisits")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.UnregisteredGuestEnitity", "UnregisteredGuest")
+                        .WithOne("UniqueVisitEntity")
+                        .HasForeignKey("Entities.UniqueVisitEntity", "UnregisteredGuestVisited");
+
+                    b.Navigation("AnonymousView");
+
+                    b.Navigation("AvatarEntity");
+
+                    b.Navigation("GuestEntity");
+
+                    b.Navigation("PageEntity");
+
+                    b.Navigation("UnregisteredGuest");
+                });
+
+            modelBuilder.Entity("Entities.ViewEntity", b =>
+                {
+                    b.HasOne("Entities.AnonymousEntity", "AnonymousView")
+                        .WithMany("ViewedContent")
+                        .HasForeignKey("AnonymousId");
+
+                    b.HasOne("MyAppAPI.Entities.CardEntity", null)
+                        .WithMany("Views")
+                        .HasForeignKey("CardEntityId");
+
+                    b.HasOne("MyAppAPI.Entities.AvatarEntity", "AvatarView")
+                        .WithMany("ViewedContent")
+                        .HasForeignKey("ViewedByAvatarId");
+
+                    b.HasOne("Entities.GuestEntity", "GuestView")
+                        .WithMany("ViewedContent")
+                        .HasForeignKey("ViewedByGuestId");
+
+                    b.HasOne("Entities.UnregisteredGuestEnitity", "UnregisteredGuestView")
+                        .WithMany("ViewedContent")
+                        .HasForeignKey("ViewedByUnregisteredGuest");
+
+                    b.Navigation("AnonymousView");
+
+                    b.Navigation("AvatarView");
+
+                    b.Navigation("GuestView");
+
+                    b.Navigation("UnregisteredGuestView");
+                });
+
+            modelBuilder.Entity("MyAppAPI.Entities.AvatarEntity", b =>
+                {
+                    b.HasOne("MyAppAPI.Entities.FlagEntity", "FlagEntity")
+                        .WithMany("AvatarEntity")
+                        .HasForeignKey("AvatarId");
+
+                    b.HasOne("Entities.GuestEntity", "Guest")
+                        .WithMany()
+                        .HasForeignKey("GuestId");
+
+                    b.Navigation("FlagEntity");
+
+                    b.Navigation("Guest");
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.CardEntity", b =>
                 {
                     b.HasOne("MyAppAPI.Entities.UserEntity", "UserEntity")
                         .WithMany("Cards")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("IsSuperUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Entities.PageEntity", null)
+                        .WithMany("TotalPosts")
+                        .HasForeignKey("PageEntityId");
 
                     b.Navigation("UserEntity");
                 });
@@ -498,19 +1307,35 @@ namespace MyAppApi.Migrations
 
                     b.HasOne("MyAppAPI.Entities.CardEntity", "CardEntity")
                         .WithMany("Comments")
-                        .HasForeignKey("CardId")
+                        .HasForeignKey("CardEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MyAppAPI.Entities.UserEntity", "UserEntity")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("IsSuperUser");
+
+                    b.HasOne("MyAppAPI.Entities.CommentEntity", "ReplyTo")
+                        .WithMany("RepliesTo")
+                        .HasForeignKey("ReplyToCommentId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("AvatarEntity");
 
                     b.Navigation("CardEntity");
 
+                    b.Navigation("ReplyTo");
+
                     b.Navigation("UserEntity");
+                });
+
+            modelBuilder.Entity("MyAppAPI.Entities.FlagEntity", b =>
+                {
+                    b.HasOne("MyAppAPI.Entities.CommentEntity", null)
+                        .WithMany("Flags")
+                        .HasForeignKey("CommentEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.LikeEntity", b =>
@@ -523,7 +1348,9 @@ namespace MyAppApi.Migrations
 
                     b.HasOne("MyAppAPI.Entities.AvatarEntity", "AvatarEntity")
                         .WithMany("Likes")
-                        .HasForeignKey("LikedId");
+                        .HasForeignKey("LikedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AvatarEntity");
 
@@ -532,25 +1359,23 @@ namespace MyAppApi.Migrations
 
             modelBuilder.Entity("MyAppAPI.Entities.ReplyEntity", b =>
                 {
-                    b.HasOne("MyAppAPI.Entities.AvatarEntity", "AvatarEnity")
+                    b.HasOne("MyAppAPI.Entities.AvatarEntity", null)
                         .WithMany("Replies")
-                        .HasForeignKey("AvatarEnityId");
+                        .HasForeignKey("AvatarEntityId");
 
                     b.HasOne("MyAppAPI.Entities.CommentEntity", "Reply")
-                        .WithMany("Replies")
+                        .WithMany()
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyAppAPI.Entities.CommentEntity", "ResponseComment")
-                        .WithOne("Response")
-                        .HasForeignKey("MyAppAPI.Entities.ReplyEntity", "ResponseId");
-
                     b.HasOne("MyAppAPI.Entities.UserEntity", "UserEntity")
                         .WithMany("Replies")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("IsSuperUser");
 
-                    b.Navigation("AvatarEnity");
+                    b.HasOne("MyAppAPI.Entities.CommentEntity", "ResponseComment")
+                        .WithMany()
+                        .HasForeignKey("ResponseToCommentId");
 
                     b.Navigation("Reply");
 
@@ -563,9 +1388,7 @@ namespace MyAppApi.Migrations
                 {
                     b.HasOne("MyAppAPI.Entities.AvatarEntity", "AvatarEntity")
                         .WithMany("TagEntities")
-                        .HasForeignKey("ByAvatarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ByAvatarId");
 
                     b.HasOne("MyAppAPI.Entities.CardEntity", "CardEntity")
                         .WithMany("Tags")
@@ -575,7 +1398,7 @@ namespace MyAppApi.Migrations
 
                     b.HasOne("MyAppAPI.Entities.UserEntity", "UserEntity")
                         .WithMany("Tags")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("IsSuperUser");
 
                     b.Navigation("AvatarEntity");
 
@@ -592,15 +1415,49 @@ namespace MyAppApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.GuestEntity", "GuestEntity")
+                        .WithMany("Votes")
+                        .HasForeignKey("VoteByGuest");
+
                     b.HasOne("MyAppAPI.Entities.AvatarEntity", "AvatarEntity")
                         .WithMany("UpVotes")
-                        .HasForeignKey("VoteById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VoteById");
 
                     b.Navigation("AvatarEntity");
 
                     b.Navigation("CardEntity");
+
+                    b.Navigation("GuestEntity");
+                });
+
+            modelBuilder.Entity("Entities.AnonymousEntity", b =>
+                {
+                    b.Navigation("UniqueVisitEntity");
+
+                    b.Navigation("ViewedContent");
+                });
+
+            modelBuilder.Entity("Entities.GuestEntity", b =>
+                {
+                    b.Navigation("UniqueVisitEntity");
+
+                    b.Navigation("ViewedContent");
+
+                    b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("Entities.PageEntity", b =>
+                {
+                    b.Navigation("TotalPosts");
+
+                    b.Navigation("UniqueVisits");
+                });
+
+            modelBuilder.Entity("Entities.UnregisteredGuestEnitity", b =>
+                {
+                    b.Navigation("UniqueVisitEntity");
+
+                    b.Navigation("ViewedContent");
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.AvatarEntity", b =>
@@ -613,25 +1470,40 @@ namespace MyAppApi.Migrations
 
                     b.Navigation("TagEntities");
 
+                    b.Navigation("UniqueVisitEntity");
+
                     b.Navigation("UpVotes");
+
+                    b.Navigation("ViewedContent");
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.CardEntity", b =>
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Images");
+
                     b.Navigation("Tags");
 
                     b.Navigation("UpVotes");
+
+                    b.Navigation("Views");
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.CommentEntity", b =>
                 {
+                    b.Navigation("Flags");
+
                     b.Navigation("Likes");
 
-                    b.Navigation("Replies");
+                    b.Navigation("Links");
 
-                    b.Navigation("Response");
+                    b.Navigation("RepliesTo");
+                });
+
+            modelBuilder.Entity("MyAppAPI.Entities.FlagEntity", b =>
+                {
+                    b.Navigation("AvatarEntity");
                 });
 
             modelBuilder.Entity("MyAppAPI.Entities.UserEntity", b =>

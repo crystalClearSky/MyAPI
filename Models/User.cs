@@ -7,7 +7,7 @@ namespace MyAppAPI.Models
 {
     public class User
     {
-        public int? Id { get; set; }
+        public bool Id { get; set; }
         public string Name { get; set; }
         public bool IsSuperUser { get; set; }
         public List<GalleryCard> GalleryCards { get; set; }

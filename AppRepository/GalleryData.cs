@@ -175,28 +175,7 @@ namespace MyAppAPI.AppRepository
             List<GalleryCard> galleryCards = new List<GalleryCard>();
             string word = string.Empty;
 
-            // for (int i = 0; i < tags.Count(); i++)
-            // {
-            //     word = (string)tags[i].TagItem;
-            //     foreach (var card in Cards)
-            //     {
-            //         if (card.Tags.Any(x => (string)x.TagItem == (string)tags[i].TagItem))
-            //         {
-            //             galleryCards.Add(card);
-            //         }
-            //     }
-            // }
-
-            // foreach (var card in Cards)
-            // {
-            //     for (int i = 0; i < tags.Count; i++)
-            //     {
-            //         if (card.Tags.Any(x => (string)x.TagItem == (string)tags[i].TagItem))
-            //         {
-            //             galleryCards.Add(card);
-            //         }
-            //     }
-            // }
+            
             int count = tags.Count - 1;
             int innerCount = tags.Count;
             // var result = new List<GalleryCard>();

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using MyAppAPI.AppRepository;
@@ -8,17 +9,18 @@ using Xunit;
 using Xunit.Abstractions;
 using System;
 using MyAppAPI.Context;
+using MyAppAPI.Entities;
+using Microsoft.EntityFrameworkCore;
 
 public class TectClass
 {
     private readonly ITestOutputHelper output;
+    // private readonly IGalleryContextData ctxr;
 
-    private readonly ContentContext ctx;
-
-    public TectClass(ITestOutputHelper output, ContentContext ctx)
+    public TectClass(ITestOutputHelper output)
     {
-        this.ctx = ctx;
         this.output = output;
+        // this.ctxr = ctxr ?? throw new ArgumentNullException(nameof(ctxr));
     }
     // [Fact]
     // public void GalleryCardCount_Test()
@@ -261,6 +263,53 @@ public class TectClass
         }
         //Then
         Assert.Equal(2, avatars.Count);
+    }
+    [Fact]
+    public void DatabaseTest()
+    {
+    //Given
+    using (var context = new ContentContext())
+    {
+        // context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        var avatar = new AvatarEntity();
+        context.AvatarEntity.Add(avatar);
+        Debug.WriteLine($"Before save: {avatar.Id}");
+
+        context.SaveChanges();
+        Debug.WriteLine($"After save: {avatar.Id}");
+
+        Assert.NotEqual(0, avatar.Id);
+    }
+    //When
+    // var cards = this.ctxr.GetAllCards();
+    // //Then
+    // Assert.Equal(3, cards.Count());
+    }
+
+    [Fact]
+    public void TestRetrieveData()
+    {
+    //Given
+    using (var context = new ContentContext())
+    {
+         var builder = new DbContextOptionsBuilder();
+            builder.UseInMemoryDatabase("TestRetrieveData");
+        // context.Database.EnsureDeleted();
+        // context.Database.EnsureCreated();
+        
+        var card = context.CardEntity.Include(c =>c.Comments);
+        
+        var comments = card.Select(c =>c.Comments).FirstOrDefault();
+        foreach (var comment in comments)
+        {
+           output.WriteLine(comment.Message);
+        }
+        Assert.NotEqual(0, comments.Count);
+    }
+    //When
+    
+    //Then
     }
     
 }

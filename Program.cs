@@ -37,7 +37,7 @@ namespace MyAppApi
                     logger.Error(ex, "An error occured while migrating the database.");
                 }
             }
-
+            
             host.Run();
         }
 

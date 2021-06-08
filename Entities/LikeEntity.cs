@@ -9,10 +9,9 @@ namespace MyAppAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public bool HasLiked { get; set; } = false;
-        [ForeignKey("LikedId")]
+        [ForeignKey("LikedById")]
         public AvatarEntity AvatarEntity { get; set; }
         public int LikedById { get; set; }
-        public int AvatarId { get; set; }
         [ForeignKey("CommentId")]
         public CommentEntity CommentEntity { get; set; }
         public int CommentId { get; set; }
